@@ -1,4 +1,4 @@
-**How to run it: **
+How to run it:
 1.Download the project.
 2.Unzip the downloaded project.
 3.Open the project VsCode.
