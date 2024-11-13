@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="widget-container">
+    <!-- Left Space: Traffic Spot Details -->
+    <div class="details">
+        <h2>Traffic Spot Details</h2>
+        <ul class="details-list">
+            <li>
+                <strong>Title:</strong> {{ spot.title }}
+            </li>
+            <li>
+                <strong>City:</strong> {{ spot.city }}
+            </li>
+            <li>
+                <strong>Address:</strong> {{ spot.address }}
+            </li>
+            <li>
+                <strong>Type:</strong> {{ spot.spot_type }}
+            </li>
+            <li>
+                <strong>Potential Factors:</strong>
+                {% if spot.potential_factors.all %}
+                {% for factor in spot.potential_factors.all %}
+                {{ factor }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                {% else %}
+                <span>No potential factors available.</span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <!-- Right Space: Embedded Map -->
+    <div id="trafficMap-{{ spot.id }}" class="spot-map" data-city="{{ spot.city }}" data-address="{{ spot.address }}"
+        data-traffic-start-point="{{ spot.traffic_start_point }}" data-end-address="{{ spot.end_address }}"
+        data-traffic-end-point="{{ spot.traffic_end_point }}" data-traffic-level="{{ spot.traffic_level }}"
+        data-spot-type="{{ spot.spot_type }}" data-created-at="{{ spot.created_at|date:'Y-m-d' }}">
+    </div>
+</div>
+<div id="col-sm-12">
+
+    <div id="col-xl-6">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Traffic Spot Analysis and Recommendations</h6>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                        aria-selected="true">Analysis</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                        aria-selected="false">Recommendation</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <!-- Display the object's analysis text -->
+                    {% if traffic_analysis %}
+                    <p>{{ traffic_analysis.analysis_text }}</p>
+                    {% else %}
+                    <p>No analysis available.</p>
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <!-- Display the object's recommendations as a list -->
+                    {% if traffic_analysis %}
+                    <ul>
+                        {% for recommendation in traffic_analysis.recommendations|split:"." %}
+                        {% if recommendation.strip %} <!-- Check for non-empty recommendations -->
+                        <li>{{ recommendation|trim }}</li>
+                        {% endif %}
+                        {% endfor %}
+                        <li style="margin-top:8px;">
+                            <a class="btn btn-sm btn-light" href="#" onclick="findAlternativeRoute();">See alternative
+                                route</a>
+                        </li>
+                    </ul>
+                    {% else %}
+                    <p>No recommendations available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    var directionsService;
+    var startMarker; // Declare as global
+    var endMarker;   // Declare as global
+    var map;         // Declare the map as global
+
+    function initTrafficMaps() {
+        directionsService = new google.maps.DirectionsService();
+
+        // Initialize the map using the single trafficMap element
+        const mapElement = document.getElementById('trafficMap-{{ spot.id }}');
+
+        if (mapElement) {
+            // Retrieve data attributes from the map element
+            const city = mapElement.getAttribute("data-city");
+            const address = mapElement.getAttribute("data-address");
+            const trafficStartPoint = mapElement.getAttribute("data-traffic-start-point").split(',');
+            const endAddress = mapElement.getAttribute("data-end-address");
+            const trafficEndPoint = mapElement.getAttribute("data-traffic-end-point").split(',');
+            const trafficLevel = mapElement.getAttribute("data-traffic-level");
+            const spotType = mapElement.getAttribute("data-spot-type");
+            const createdAt = mapElement.getAttribute("data-created-at");
+
+            // Convert coordinates to numbers
+            const startLat = parseFloat(trafficStartPoint[0]);
+            const startLng = parseFloat(trafficStartPoint[1]);
+            const endLat = parseFloat(trafficEndPoint[0]);
+            const endLng = parseFloat(trafficEndPoint[1]);
+
+            // Set the map options
+            const mapOptions = {
+                center: { lat: startLat, lng: startLng },
+                zoom: 14,
+                styles: [
+                    {
+                        featureType: "all",
+                        elementType: "all",
+                        stylers: [
+                            { invert_lightness: true },
+                            { saturation: -100 },
+                            { lightness: 0 },
+                            { visibility: "on" },
+                        ],
+                    },
+                ],
+            };
+
+            // Initialize the map
+            map = new google.maps.Map(mapElement, mapOptions);
+
+            // Initialize Traffic Layer
+            const trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+
+            // Create markers for start and end points
+            startMarker = new google.maps.Marker({
+                position: { lat: startLat, lng: startLng },
+                map: map,
+                title: `${city} - ${address}`,
+                icon: getTrafficIcon(trafficLevel),
+            });
+
+            endMarker = new google.maps.Marker({
+                position: { lat: endLat, lng: endLng },
+                map: map,
+                title: `${city} - ${endAddress}`,
+                icon: getTrafficIcon(trafficLevel),
+            });
+
+            // Use DirectionsService to get a precise route
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                map: map,
+                polylineOptions: {
+                    strokeColor: getTrafficColor(trafficLevel),
+                    strokeWeight: 4,
+                    strokeOpacity: 1.0,
+                },
+                suppressMarkers: true, // Use custom markers
+            });
+
+            // Define the route request
+            const routeRequest = {
+                origin: { lat: startLat, lng: startLng },
+                destination: { lat: endLat, lng: endLng },
+                travelMode: google.maps.TravelMode.DRIVING,
+            };
+
+            // Get the route and display it on the map
+            directionsService.route(routeRequest, (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(result);
+                } else {
+                    console.log("Error occurred while retrieving route:", status);
+                }
+            });
+        }
+    }
+
+    function findAlternativeRoute() {
+        if (!startMarker || !endMarker) {
+            alert("Please set both the start and end points on the map to find an alternative route.");
+            return;
+        }
+
+        // Request an alternative route using the Directions API
+        var request = {
+            origin: startMarker.getPosition(),
+            destination: endMarker.getPosition(),
+            travelMode: google.maps.TravelMode.DRIVING,
+            provideRouteAlternatives: true // Request alternative routes
+        };
+
+        directionsService.route(request, function (result, status) {
+            if (status === google.maps.DirectionsStatus.OK && result.routes.length > 1) {
+                // Clear the previous route (if any)
+                // directionsDisplay.setMap(null);
+                // Display the alternative route
+                var alternativeRouteIndex = 1; // Choose the second route as an alternative
+                var directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: map,
+                    routeIndex: alternativeRouteIndex,
+                    polylineOptions: {
+                        strokeColor: 'blue', // Different color for the alternative route
+                        strokeOpacity: 0.7,
+                        strokeWeight: 5
+                    }
+                });
+                directionsRenderer.setDirections(result);
+            } else {
+                alert("No alternative routes available.");
+                console.log("Error retrieving alternative routes:", status);
+            }
+        });
+    }
+
+    // Function to get the icon color based on traffic level
+    function getTrafficIcon(trafficLevel) {
+        switch (trafficLevel) {
+            case "High":
+                return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            case "Moderate":
+                return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            case "Low":
+                return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            default:
+                return "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        }
+    }
+
+    // Function to get the stroke color for the polyline based on traffic level
+    function getTrafficColor(trafficLevel) {
+        switch (trafficLevel) {
+            case "High":
+                return "#FF0000"; // Red
+            case "Moderate":
+                return "#FFFF00"; // Yellow
+            case "Low":
+                return "#00FF00"; // Green
+            default:
+                return "#0000FF"; // Blue
+        }
+    }
+    // Load the Google Maps script with your API key
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCI1s4gfgAJhKJQA19Ff2Uv4NBwsdXBFpQ&callback=initTrafficMaps`;
+    script.async = true;
+    document.head.appendChild(script);
+</script>
+
+{% endblock %}

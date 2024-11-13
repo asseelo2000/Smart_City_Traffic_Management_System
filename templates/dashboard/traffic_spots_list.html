@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <!-- Messages start -->
+        {% for spot in spots %}
+        <div class="col-sm-12 col-md-6 col-xl-4">
+            <div class="h-100 bg-secondary rounded p-4">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                    <div class="bg-secondary rounded h-100 p-4">
+                        <!-- Unique ID for each map -->
+                        <div id="trafficMap-{{ spot.id }}" style="width: 300px; height: 300px;"
+                            data-city="{{ spot.city }}" data-address="{{ spot.address }}"
+                            data-traffic-start-point="{{ spot.traffic_start_point }}"
+                            data-end-address="{{ spot.end_address }}"
+                            data-traffic-end-point="{{ spot.traffic_end_point }}"
+                            data-traffic-level="{{ spot.traffic_level }}" data-spot-type="{{ spot.spot_type }}"
+                            data-created-at="{{ spot.created_at }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center border-bottom py-3">
+                    <i class="fa fa-map-marker fa-3x text-primary"></i>
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-0">{{ spot.title }}</h6>
+                            <small>{{ spot.created_at|date:"d M Y" }}</small>
+                        </div>
+                        <span>{{ spot.address }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Messages ends -->
+
+        <!-- Calendar start -->
+        <!-- <div class="col-sm-12 col-md-6 col-xl-4">
+            <div class="h-100 bg-secondary rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h6 class="mb-0">Calender</h6>
+                    <a href="">Show All</a>
+                </div>
+                <div id="calender"></div>
+            </div>
+        </div> -->
+        <!-- Calendar ends -->
+
+        <!-- To do list start -->
+        <!-- <div class="col-sm-12 col-md-6 col-xl-4">
+            <div class="h-100 bg-secondary rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h6 class="mb-0">To Do List</h6>
+                    <a href="">Show All</a>
+                </div>
+                <div class="d-flex mb-2">
+                    <input class="form-control bg-dark border-0" type="text" placeholder="Enter task">
+                    <button type="button" class="btn btn-primary ms-2">Add</button>
+                </div>
+                <div class="d-flex align-items-center border-bottom py-2">
+                    <input class="form-check-input m-0" type="checkbox">
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <span>Short task goes here...</span>
+                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center border-bottom py-2">
+                    <input class="form-check-input m-0" type="checkbox">
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <span>Short task goes here...</span>
+                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center border-bottom py-2">
+                    <input class="form-check-input m-0" type="checkbox" checked>
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <span><del>Short task goes here...</del></span>
+                            <button class="btn btn-sm text-primary"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center border-bottom py-2">
+                    <input class="form-check-input m-0" type="checkbox">
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <span>Short task goes here...</span>
+                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center pt-2">
+                    <input class="form-check-input m-0" type="checkbox">
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <span>Short task goes here...</span>
+                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- To do list ends -->
+    </div>
+</div>
+<!-- Recent Spots List start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Traffic Spots</h6>
+            <a href="">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Spot Type</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for spot in spots %}
+                    <tr>
+                        <td><input class="form-check-input" type="checkbox"></td>
+                        <!-- <span>{{ spot.created_at|date:"d/m/Y" }}</span> -->
+                        <td>{{ spot.created_at|date:"d/m/Y" }}</td>
+                        <td>{{ spot.spot_type }}</td>
+                        <td>{{ spot.city }}</td>
+                        <td>{{ spot.address }}</td>
+                        <td>{{ spot.traffic_level }}</td>
+                        <td><a class="btn btn-sm btn-primary" href="{% url 'Traffic_Spots:display_traffic_spot' spot.id %}">Display</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var directionsService;
+
+    function initTrafficMaps() {
+        directionsService = new google.maps.DirectionsService();
+
+        // Loop through each traffic map container and initialize a map for each
+        document.querySelectorAll('[id^="trafficMap-"]').forEach((mapElement) => {
+            const mapId = mapElement.id;
+            
+            // Retrieve data attributes from each map element
+            const city = mapElement.getAttribute("data-city");
+            const address = mapElement.getAttribute("data-address");
+            const trafficStartPoint = mapElement.getAttribute("data-traffic-start-point").split(',');
+            const endAddress = mapElement.getAttribute("data-end-address");
+            const trafficEndPoint = mapElement.getAttribute("data-traffic-end-point").split(',');
+            const trafficLevel = mapElement.getAttribute("data-traffic-level");
+            const spotType = mapElement.getAttribute("data-spot-type");
+            const createdAt = mapElement.getAttribute("data-created-at");
+
+            // Convert coordinates to numbers
+            const startLat = parseFloat(trafficStartPoint[0]);
+            const startLng = parseFloat(trafficStartPoint[1]);
+            const endLat = parseFloat(trafficEndPoint[0]);
+            const endLng = parseFloat(trafficEndPoint[1]);
+
+            // Set the map options
+            const mapOptions = {
+                center: { lat: startLat, lng: startLng },
+                zoom: 14,
+                styles: [
+                    {
+                        featureType: "all",
+                        elementType: "all",
+                        stylers: [
+                            { invert_lightness: true },
+                            { saturation: -100 },
+                            { lightness: 0 },
+                            { visibility: "on" },
+                        ],
+                    },
+                ],
+            };
+
+            // Initialize the map
+            const map = new google.maps.Map(document.getElementById(mapId), mapOptions);
+
+            // Initialize Traffic Layer
+            const trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+
+            // Create markers for start and end points
+            const startMarker = new google.maps.Marker({
+                position: { lat: startLat, lng: startLng },
+                map: map,
+                title: `${city} - ${address}`,
+                icon: getTrafficIcon(trafficLevel),
+            });
+
+            const endMarker = new google.maps.Marker({
+                position: { lat: endLat, lng: endLng },
+                map: map,
+                title: `${city} - ${endAddress}`,
+                icon: getTrafficIcon(trafficLevel),
+            });
+
+            // Use DirectionsService to get a precise route
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                map: map,
+                polylineOptions: {
+                    strokeColor: getTrafficColor(trafficLevel),
+                    strokeWeight: 4,
+                    strokeOpacity: 1.0,
+                },
+                suppressMarkers: true, // Use custom markers
+            });
+
+            // Define the route request
+            const routeRequest = {
+                origin: { lat: startLat, lng: startLng },
+                destination: { lat: endLat, lng: endLng },
+                travelMode: google.maps.TravelMode.DRIVING,
+            };
+
+            // Get the route and display it on the map
+            directionsService.route(routeRequest, (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(result);
+                } else {
+                    console.log("Error occurred while retrieving route:", status);
+                }
+            });
+        });
+    }
+
+    // Function to get the icon color based on traffic level
+    function getTrafficIcon(trafficLevel) {
+        switch (trafficLevel) {
+            case "High":
+                return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            case "Moderate":
+                return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            case "Low":
+                return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            default:
+                return "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+        }
+    }
+
+    // Function to get the stroke color for the polyline based on traffic level
+    function getTrafficColor(trafficLevel) {
+        switch (trafficLevel) {
+            case "High":
+                return "#FF0000"; // Red
+            case "Moderate":
+                return "#FFFF00"; // Yellow
+            case "Low":
+                return "#00FF00"; // Green
+            default:
+                return "#0000FF"; // Blue
+        }
+    }
+
+    // Load the Google Maps script with your API key
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCI1s4gfgAJhKJQA19Ff2Uv4NBwsdXBFpQ&callback=initTrafficMaps`;
+    script.async = true;
+    document.head.appendChild(script);
+</script>
+
+<!-- Recent Spots End -->
+{% endblock %}

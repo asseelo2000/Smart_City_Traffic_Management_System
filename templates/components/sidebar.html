@@ -1,0 +1,58 @@
+{% load static %}
+<div class="sidebar pe-4 pb-3">
+  <nav class="navbar bg-secondary navbar-dark">
+    <!-- Logo start -->
+    <a href="{% url 'Dashboard:index'%}" class="navbar-brand mx-4 mb-3">
+      <h3 class="text-primary"><i class="fa fa-map me-2"></i>TMMS</h3>
+    </a>
+    <!-- Logo end -->
+
+    <!-- Username and image start -->
+    <div class="d-flex align-items-center ms-4 mb-4">
+      <div class="position-relative">
+        <img class="rounded-circle" src="{% static 'img/user.jpg'%}" alt="" style="width: 40px; height: 40px;">
+        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+        </div>
+      </div>
+      <div class="ms-3">
+        <h6 class="mb-0">{{ user.first_name }}</h6>
+        <span>Admin</span>
+      </div>
+    </div>
+    <!-- Username and image end -->
+
+    <!-- Sidebar start -->
+    <div class="navbar-nav w-100">
+      <a href="{% url 'Dashboard:index' %}"
+        class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+        <i class="fa fa-cubes me-2"></i>Dashboard
+      </a>
+      <a href="{% url 'Dashboard:live_traffic_map' %}"
+        class="nav-item nav-link {% if request.resolver_match.url_name == 'live_traffic_map' %}active{% endif %}">
+        <i class="fa fa-globe me-2"></i>Live Traffic Map
+      </a>
+      <a href="{% url 'Dashboard:traffic_spots_list' %}"
+        class="nav-item nav-link {% if request.resolver_match.url_name == 'traffic_spots_list' %}active{% endif %}"><i
+          class="fa fa-map-marker me-2"></i>Traffic Spots</a>
+    </div>
+    <!-- Sidebar end -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get all sidebar links
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+        // Loop through each link
+        navLinks.forEach(link => {
+          link.addEventListener('click', function () {
+            // Remove "active" class from all links
+            navLinks.forEach(nav => nav.classList.remove('active'));
+
+            // Add "active" class to the clicked link
+            this.classList.add('active');
+          });
+        });
+      });
+
+    </script>
+  </nav>
+</div>

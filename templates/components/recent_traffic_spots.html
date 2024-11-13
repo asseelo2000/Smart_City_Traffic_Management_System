@@ -1,0 +1,46 @@
+{% load static %}
+
+{% block content %}
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Traffic Spots</h6>
+            <a href="{% url 'Dashboard:traffic_spots_list'%}">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Spot Type</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for spot in spots  %}
+                    <tr>
+                        <td><input class="form-check-input" type="checkbox"></td>
+                        <!-- <span>{{ spot.created_at|date:"d/m/Y" }}</span> -->
+                        <td>{{ spot.created_at|date:"d/m/Y" }}</td>
+                        <td>{{ spot.spot_type }}</td>
+                        <td>{{ spot.city }}</td>
+                        <td>{{ spot.address }}</td>
+                        <td>{{ spot.traffic_level }}</td>
+                        <td> <a class="btn btn-sm btn-primary" href="{% url 'Traffic_Spots:display_traffic_spot' spot.id %}">Display</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->
+
+{% endblock%}

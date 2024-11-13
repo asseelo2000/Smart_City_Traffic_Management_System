@@ -1,0 +1,184 @@
+:root {
+  --primary: #EB1616;
+  --secondary: #191C24;
+  --light: #6C7293;
+  --dark: #000000;
+}
+#map {
+    flex: 1;
+    height: 500px;
+    width: 100%;
+    position: relative;
+  }
+
+  #legend {
+    flex-shrink: 0;
+    background-color: #fff;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 10; /* Set margin to 0 */
+    border: 1px solid #ccc;
+    max-width: 200px;
+    font-size: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .legend-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+.legend-line {
+width: 30px;
+height: 5px;
+}
+
+.light-traffic {
+background-color: #00ff00 ;
+}
+
+.moderate-traffic {
+background-color: yellow;
+}
+
+.heavy-traffic {
+background-color: orange;
+}
+
+.congested-traffic {
+background-color: red;
+}
+  #search-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  #search-form {
+    display: inline-block;
+    background-color: #0b0a0a;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  #search-input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+    width: 300px;
+    box-shadow: 0 0 5px rgba(255, 3, 3, 0.53);
+    background-color: #000000;
+    color: #b9b9b9;
+  }
+
+  #search-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px  #f10a0a;
+  }
+
+  #search-button {
+    padding: 10px 20px;
+    background-color: #EB1616;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  #search-button:hover {
+    background-color:#a40707;
+  }
+
+  #directions-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  #directions-form {
+    display: inline-block;
+    /* background-color: #121111; */
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  #origin-input,
+  #destination-input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+    width: 300px;
+    box-shadow: 0 0 5px rgba(255, 3, 3, 0.53);
+    background-color: #000000;
+    color: #b9b9b9;
+  }
+
+  #origin-input:focus,
+  #destination-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px  #f10a0a;
+  }
+
+  .route-button {
+    padding: 10px 20px;
+    background-color: #EB1616;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .route-button:hover {
+    background-color:#a40707;
+  }
+
+  #logo-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  #logo-container img {
+    max-width: 200px;
+    height: auto;
+  }
+
+  @font-face {
+    font-family: 'Font Name';
+    src: url('path-to-your-font.woff2') format('woff2'),
+         url('path-to-your-font.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+#toggle-route {
+display: none; /* Hide the checkbox by default */
+}
+
+#toggle-route + label {
+margin-left: 10px;
+}
+
+
+.route-button {
+margin-right: 10px;
+float: right;
+}
+
+#toggle-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+  }
