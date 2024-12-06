@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-jl024#)=snl-7aynr#r=dwqz1ji3u*-qo3&r4u2l#maj!z8_58
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG=True
+DEBUG=False
 ALLOWED_HOSTS = ['smart-city-traffic-management-system.onrender.com']
 
 
@@ -50,12 +50,16 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 CSRF_COOKIE_SECURE = False
 
