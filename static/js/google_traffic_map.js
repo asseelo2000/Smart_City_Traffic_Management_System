@@ -112,8 +112,8 @@ function initMap() {
   directionsDisplay.setMap(map);
   directionsDisplay.setOptions({
     polylineOptions: {
-      strokeColor: 'red'
-    }
+      strokeColor: "red",
+    },
   });
 
   var searchButton = document.getElementById("search-button");
@@ -166,10 +166,27 @@ function performSearch(query) {
         map: map,
         position: location,
       });
-    } else {
+    }
+
+    var city = extractCityFromResults(results);
+    if (city) {
+      document.getElementById("id_city").value = city;
+    } 
+    else {
       console.log("No results found for the search query.");
     }
   });
+}
+
+function extractCityFromResults(results) {
+  for (var i = 0; i < results[0].address_components.length; i++) {
+    var component = results[0].address_components[i];
+    if (component.types.includes("locality")) {
+      // Return the city name
+      return component.long_name;
+    }
+  }
+  return null;
 }
 
 function getDirections(event) {
