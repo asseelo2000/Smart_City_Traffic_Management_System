@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
 # from decouple import config
@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 
-
+DATABASES['default'] = dj_database_url.parse('postgresql://trafficmonitoringdb_user:aCZVJ20WThwsEoPsHbz7lkVeem5fT53H@dpg-ct9lqfrv2p9s738kreeg-a.oregon-postgres.render.com/trafficmonitoringdb')
 
 # Redirect URLs after login/logout
 LOGIN_REDIRECT_URL = 'Dashboard:index'
