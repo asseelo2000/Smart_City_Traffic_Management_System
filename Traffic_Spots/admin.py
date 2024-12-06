@@ -9,7 +9,7 @@ import requests
 import json
 from django.conf import settings
 
-from openai import OpenAI
+# from openai import OpenAI
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
@@ -25,7 +25,7 @@ class TrafficSpotAdmin(admin.ModelAdmin):
             'https://maps.googleapis.com/maps/api/js?key=AIzaSyCI1s4gfgAJhKJQA19Ff2Uv4NBwsdXBFpQ&libraries=places',
             'js/google_traffic_map.js',
         )
-    change_form_template = 'traffic-super/Traffic_Spots/TrafficSpot/change_form.html'
+    change_form_template = 'admin/Traffic_Spots/TrafficSpot/change_form.html'
 
     # class Media:
     #     js = ('https://maps.googleapis.com/maps/api/js?key=AIzaSyCI1s4gfgAJhKJQA19Ff2Uv4NBwsdXBFpQ&libraries=places', 'js/google_traffic_map.js')

@@ -218,6 +218,6 @@ window.onload = initMap;
 
 // Load the map script with your API key
 const script = document.createElement("script");
-script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCI1s4gfgAJhKJQA19Ff2Uv4NBwsdXBFpQ&callback=initMap`;
+script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCMStVxIAgJETgmkls2wGVe_VU-YCscJIU&callback=initMap`;
 script.async = true;
 document.head.appendChild(script);

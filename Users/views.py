@@ -14,7 +14,7 @@ def login_view(request):
 
             # Check if the user is a superuser and redirect to the admin interface
             if user.is_superuser:
-                return redirect('/traffic-super/')  # Redirect to the Django admin interface
+                return redirect('/admin/')  # Redirect to the Django admin interface
             
              # Check if the user is an admin and redirect to the dashboard
             else:
