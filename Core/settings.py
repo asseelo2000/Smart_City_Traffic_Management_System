@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse('postgresql://trafficmonitoringdb_user:aCZVJ20WThwsEoPsHbz7lkVeem5fT53H@dpg-ct9lqfrv2p9s738kreeg-a.oregon-postgres.render.com/trafficmonitoringdb')
+DATABASES['default'] = dj_database_url.parse('postgresql://trafficmonitoringdb_wnna_user:2LhB7K0DB2gj1KKEPCzifRVpRqN16R9F@dpg-ct9n42qlqhvc73ekjuag-a.oregon-postgres.render.com/trafficmonitoringdb_wnna')
 
 # Redirect URLs after login/logout
 LOGIN_REDIRECT_URL = 'Dashboard:index'
